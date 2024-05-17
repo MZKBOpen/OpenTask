@@ -34,14 +34,17 @@ Table teams_and_projects {
   project_id integer
 }
 
-Table task_relations {
-  parent integer 
-  child integer
+Table teams_and_users {
+  team_id integer
+  user_id integer
+  role integer
+  tasks__completed integer
 }
 
 Table projects {
   id integer [primary key]
-  description varchar
+  name varchar
+  description text
   start_date timestamp
   deadline timestamp
   __created_on timestamp
@@ -50,32 +53,53 @@ Table projects {
 
 Table teams {
   id integer [primary key]
+  name varchar
+  description text
+  picture image
 }
 
 Table users { 
   id integer [primary key]
+  bio text
+  account_id integer
+  name varchar
+  picture image
+  __created_on timestamp
 }
 
-// Table goals {
-//   id integer [primary key]
-//   team_id integer
-// }
+Table accounts {
+  id integer [primary key]
+  email email
+  password password
+  user_id integer
+}
 
 Table tasks {
   id integer [primary key]
+  description text
   goal_id integer
   team_id integer
   assignee integer
-  depth integer
+  state integer
+  priority integer
+}
+
+Table comments {
+  id integer [primary key]
+  comment text
+  user_id integer
+  task_id integer 
+  _created_on timestamp
 }
 
 Ref: projects.id > teams_and_projects.project_id
 Ref: teams.id > teams_and_projects.team_id
 
 Ref: tasks.team_id > teams.id
-Ref: tasks.id > task_relations.parent
-Ref: tasks.id > task_relations.child
-// Ref: goals.team_id > teams.id
-// Ref: tasks.goal_id > goals.id
-
 Ref: tasks.assignee > users.id
+Ref: teams.id > teams_and_users.team_id
+Ref: users.id > teams_and_users.user_id
+Ref: accounts.user_id > users.id
+Ref: users.account_id > accounts.id
+Ref: tasks.id > comments.task_id
+Ref: users.id > comments.user_id
