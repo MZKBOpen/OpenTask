@@ -13,14 +13,16 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           ssh-key: ${{ secrets.SSH_DEPLOY_PRIVATE_KEY }}
 
       - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v3
+        uses: peter-evans/create-pull-request@v6
         with:
-          branch: staging
-          title: ${{ github.ref }} Pull Request
-          body: Automatically generated PR from branch ${{ github.ref }}
-          draft: true
+          base: "staging"
+          branch: "${GITHUB_REF#refs/heads/}"
+          title: "Merge ${GITHUB_REF#refs/heads/} into staging"
+          body: "Automatically generated PR from branch ${GITHUB_REF#refs/heads/}"
+          draft: false
+          delete-branch: true
