@@ -26,3 +26,4 @@ jobs:
           title: Merge ${GITHUB_REF#refs/heads/} into staging
           draft: false
           delete-branch: true
+          reviewers: MikeZylka
